@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator pothos {
+  provider = "prisma-pothos-types"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  // Metadata
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+
+  // User Information
+  email     String
+  firstName String
+  lastName  String
+  username  String
+  password  String
+  school    String?
+
+  // Relations
+  donationRecords DonationRecord[]
+  spendingRecords SpendingRecord[]
+  salesRecords    SalesRecord[]
+}
+
+model DonationRecord {
+  // Metadata
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+
+  // Donation Information
+  donorName    String
+  donorContact String
+  amount       Float
+
+  // Relations
+  author   User?   @relation(fields: [authorId], references: [id])
+  authorId String? @db.Uuid
+}
+
+model SpendingRecord {
+  // Metadata
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+
+  // Spending Information
+  note   String
+  amount Float
+
+  // Relations
+  author   User?   @relation(fields: [authorId], references: [id])
+  authorId String? @db.Uuid
+}
+
+model SalesRecord {
+  // Metadata
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now())
+
+  // Sales information
+  clientName    String
+  clientContact String
+  product       String
+  price         Float
+  quantity      Int
+  discount      Float
+
+  // Relations
+  author   User?   @relation(fields: [authorId], references: [id])
+  authorId String? @db.Uuid
+}
