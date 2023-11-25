@@ -85,7 +85,6 @@ model AccountRequest {
   id         String    @id @default(uuid()) @db.Uuid
   createdAt  DateTime  @default(now())
   acceptedAt DateTime?
-  deniedAt   DateTime?
 
   // Request information
   email     String  @unique

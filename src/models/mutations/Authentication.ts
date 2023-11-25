@@ -164,11 +164,8 @@ builder.mutationFields((t) => ({
       /* Throw error if account request doesn't exist */
       if (!request) throw new Error(`Request doesn't exist`);
 
-      /* Update denial date */
-      await prisma.accountRequest.update({
-        data: { acceptedAt: new Date() },
-        where: { email: input.email },
-      });
+      /* Delete denied account */
+      await prisma.accountRequest.delete({ where: { email: input.email } });
     },
   }),
 }));

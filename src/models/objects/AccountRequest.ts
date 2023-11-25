@@ -16,6 +16,5 @@ export const AccountRequest: PrismaObjectRef<PrismaModelTypes> =
       school: t.exposeString("school"),
       createdAt: t.expose("createdAt", { type: "Date" }),
       acceptedAt: t.expose("acceptedAt", { type: "Date", nullable: true }),
-      deniedAt: t.expose("deniedAt", { type: "Date", nullable: true }),
     }),
   });
