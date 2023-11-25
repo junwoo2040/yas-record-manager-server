@@ -20,10 +20,10 @@ model User {
   createdAt DateTime @default(now())
 
   // User Information
-  email     String
+  email     String  @unique
   firstName String
   lastName  String
-  username  String
+  username  String  @unique
   password  String
   school    String?
 
@@ -78,4 +78,20 @@ model SalesRecord {
   // Relations
   author   User?   @relation(fields: [authorId], references: [id])
   authorId String? @db.Uuid
+}
+
+model AccountRequest {
+  // Metadata
+  id         String    @id @default(uuid()) @db.Uuid
+  createdAt  DateTime  @default(now())
+  acceptedAt DateTime?
+  deniedAt   DateTime?
+
+  // Request information
+  email     String  @unique
+  firstName String
+  lastName  String
+  username  String  @unique
+  password  String
+  school    String?
 }

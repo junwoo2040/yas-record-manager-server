@@ -1,3 +1,6 @@
+/* main.ts */
+
+/* Initial setup */
 import "./setup";
 
 /* Imports */
@@ -6,10 +9,12 @@ import cors, { CorsOptions } from "cors";
 
 import { createYoga } from "graphql-yoga";
 import { schema } from "@models/index";
+import { useCookies } from "@whatwg-node/server-plugin-cookies";
+import { verify } from "jsonwebtoken";
 
 /* Load environment variables */
 const port = process.env.PORT;
-const origin = process.env.ORIGINS;
+const origin = process.env.ORIGINS?.split(",");
 
 /* Initialize express server */
 const app = express();
@@ -26,7 +31,10 @@ app.use(cors(options));
 
 /* GraphQL */
 /* Create GraphQL Yoga */
-const yoga = createYoga({ schema });
+const yoga = createYoga({
+  schema,
+  plugins: [useCookies()],
+});
 
 /* Register GraphQL Yoga endpoint */
 app.use(yoga.graphqlEndpoint, yoga);
