@@ -141,7 +141,7 @@ builder.mutationFields((t) => ({
       });
 
       /* Remove unnecessary properties */
-      const { id, createdAt, acceptedAt, deniedAt, ...data } = request;
+      const { id, createdAt, acceptedAt, ...data } = request;
 
       /* Create new user from request information */
       return await prisma.user.create({ data: { ...data } });
