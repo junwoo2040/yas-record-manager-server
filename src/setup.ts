@@ -1,4 +1,8 @@
+/* setup.ts */
+
+/* Imports */
+import dotenv from "dotenv";
 import "./paths";
 
-import dotenv from "dotenv";
+/* Configure environment variables */
 dotenv.config();

@@ -1,5 +1,8 @@
-import "./Error";
-import "./User";
+/* models/objects/index.ts */
+
+/* Imports */
 import "./DonationRecord";
-import "./SpendingRecord";
+import "./Error";
 import "./SalesRecord";
+import "./SpendingRecord";
+import "./User";

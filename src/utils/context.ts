@@ -1,7 +1,11 @@
+/* utils/context.ts */
+
+/* Imports */
 import { YogaInitialContext } from "graphql-yoga";
 import { verify } from "jsonwebtoken";
-import { signAuthTokens } from "./jwt";
+
 import { prisma } from "@models/db";
+import { signAuthTokens } from "@utils/jwt";
 
 /* Context Interface */
 export interface IContext extends YogaInitialContext {
@@ -49,7 +53,7 @@ export const getUserFromRequest = async (request: Request) => {
 
   /* Sign new authentication tokens */
   const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-    await signAuthTokens({ userId: user.id }, request);
+    await signAuthTokens({ userId: user.id });
 
   /* Set access token cookie */
   await request.cookieStore?.set("access-token", newAccessToken);

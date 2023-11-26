@@ -4,13 +4,13 @@
 import "./setup";
 
 /* Imports */
-import express from "express";
 import cors, { CorsOptions } from "cors";
+import express from "express";
 
-import { createYoga } from "graphql-yoga";
-import { schema } from "@models/index";
 import { useCookies } from "@whatwg-node/server-plugin-cookies";
-import { verify } from "jsonwebtoken";
+import { createYoga } from "graphql-yoga";
+
+import { schema } from "@models/index";
 import { getUserFromRequest } from "@utils/context";
 
 /* Load environment variables */
@@ -34,6 +34,7 @@ app.use(cors(options));
 /* Create GraphQL Yoga */
 const yoga = createYoga({
   schema,
+  /* Context setter callback */
   context: async ({ request }) => {
     const userId = await getUserFromRequest(request);
 

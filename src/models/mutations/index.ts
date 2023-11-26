@@ -1,5 +1,8 @@
-import "./User";
-import "./DonationRecord";
-import "./SpendingRecord";
-import "./SalesRecord";
+/* models/mutations/index.ts */
+
+/* Imports */
 import "./Authentication";
+import "./DonationRecord";
+import "./SalesRecord";
+import "./SpendingRecord";
+import "./User";

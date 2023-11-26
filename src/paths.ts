@@ -1,9 +1,13 @@
 /* paths.ts */
-import "module-alias/register";
-import { addAliases } from "module-alias";
 
+/* Imports */
+import { addAliases } from "module-alias";
+import "module-alias/register";
+
+/* Get srouce directory */
 const srcDir = `${process.cwd()}/src`;
 
+/* Map aliases with path */
 addAliases({
   "@routes": `${srcDir}/routes`,
   "@models": `${srcDir}/models`,

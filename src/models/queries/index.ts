@@ -1,4 +1,7 @@
-import "./User";
+/* models/queries/index.ts */
+
+/* Imports */
 import "./DonationRecord";
-import "./SpendingRecord";
 import "./SalesRecord";
+import "./SpendingRecord";
+import "./User";

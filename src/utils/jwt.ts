@@ -1,13 +1,16 @@
+/* utils/jwt.ts */
+
+/* Imports */
 import { sign } from "jsonwebtoken";
 
-export const signAuthTokens = async (payload: any, request: Request) => {
-  /* Sign access token with JWT */
-  const accessToken = sign(payload, process.env.SECRET!, {
+export const signAuthTokens = async (payload: any) => {
+  /* Sign access token with access token private key */
+  const accessToken = sign(payload, process.env.JWT_ACCESS_TOKEN_SECRET!, {
     expiresIn: "10s",
   });
 
-  /* Sign refresh token with JWT */
-  const refreshToken = sign(payload, process.env.SECRET!, {
+  /* Sign refresh token with refresh token private key */
+  const refreshToken = sign(payload, process.env.JWT_REFRESH_TOKEN_SECRET!, {
     expiresIn: "7d",
   });
 

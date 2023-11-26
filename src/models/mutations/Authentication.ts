@@ -1,5 +1,7 @@
+/* models/mutations/Authentication.ts */
+
+/* Imports */
 import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
 
 import { builder } from "@models/builder";
 import { prisma } from "@models/db";
@@ -10,7 +12,8 @@ import { AccountRequest } from "@models/objects/AccountRequest";
 import { encrypt } from "@utils/encrypt";
 import { signAuthTokens } from "@utils/jwt";
 
-const AccountLoginInput = builder.inputType("LoginInput", {
+/* Define input type */
+const AccountLoginInput = builder.inputType("AccountLoginInput", {
   fields: (t) => ({
     username: t.string(),
     password: t.string(),
@@ -40,6 +43,7 @@ const AccountDenyInput = builder.inputType("AccountDenyInput", {
 });
 
 builder.mutationFields((t) => ({
+  /* Handle account login */
   accountLogin: t.prismaField({
     type: User,
     errors: {
@@ -48,7 +52,7 @@ builder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: AccountLoginInput, required: true }),
     },
-    resolve: async (query, root, { input }, ctx, info) => {
+    resolve: async (_query, _root, { input }, ctx, _info) => {
       /* Find user by username */
       const user = await prisma.user.findUnique({
         where: { username: input.username },
@@ -65,10 +69,9 @@ builder.mutationFields((t) => ({
       if (!isValid) throw new Error(`Incorrect password`);
 
       /* Sign authentication tokens */
-      const { accessToken, refreshToken } = await signAuthTokens(
-        { userId: user.id },
-        ctx.request,
-      );
+      const { accessToken, refreshToken } = await signAuthTokens({
+        userId: user.id,
+      });
 
       /* Set access token cookie */
       await ctx.request.cookieStore?.set("access-token", accessToken);
@@ -79,6 +82,7 @@ builder.mutationFields((t) => ({
       return user;
     },
   }),
+  /* Handle account request */
   accountRequest: t.prismaField({
     type: AccountRequest,
     errors: {
@@ -87,7 +91,7 @@ builder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: AccountRequestInput, required: true }),
     },
-    resolve: async (query, root, { input }, ctx, info) => {
+    resolve: async (_query, _root, { input }, _ctx, _info) => {
       /* Check if username is taken */
       const usernameCheck = await prisma.user.findUnique({
         where: { username: input.username },
@@ -116,6 +120,7 @@ builder.mutationFields((t) => ({
       });
     },
   }),
+  /* Handle account accept */
   accountAccept: t.prismaField({
     type: User,
     errors: {
@@ -124,7 +129,7 @@ builder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: AccountAcceptInput }),
     },
-    resolve: async (query, root, { input }, ctx, info) => {
+    resolve: async (_query, _root, { input }, _ctx, _info) => {
       /* Find target account request */
       const request = await prisma.accountRequest.findUnique({
         where: { email: input.email },
@@ -146,6 +151,7 @@ builder.mutationFields((t) => ({
       return await prisma.user.create({ data: { ...data } });
     },
   }),
+  /* Handle account deny */
   accountDeny: t.prismaField({
     type: User,
     errors: {
@@ -154,7 +160,7 @@ builder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: AccountDenyInput }),
     },
-    resolve: async (query, root, { input }, ctx, info) => {
+    resolve: async (_query, _root, { input }, _ctx, _info) => {
       /* Find target account request */
       const request = await prisma.accountRequest.findUnique({
         where: { email: input.email },
