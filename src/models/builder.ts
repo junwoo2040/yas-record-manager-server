@@ -4,14 +4,10 @@ import SchemaBuilder from "@pothos/core";
 import PrismaPlugin from "@pothos/plugin-prisma";
 import ErrorsPlugin from "@pothos/plugin-errors";
 import PrismaTypes from "@pothos/plugin-prisma/generated";
+import { DateResolver } from "graphql-scalars";
 
 import { prisma } from "./db";
-import { DateResolver } from "graphql-scalars";
-import { YogaInitialContext } from "graphql-yoga";
-
-interface IContext extends YogaInitialContext {
-  userId: string;
-}
+import { IContext } from "@utils/context";
 
 export const builder = new SchemaBuilder<{
   DefaultFieldNullability: true;

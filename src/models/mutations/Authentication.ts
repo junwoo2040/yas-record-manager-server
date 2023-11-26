@@ -5,8 +5,10 @@ import { builder } from "@models/builder";
 import { prisma } from "@models/db";
 
 import { User } from "@models/objects/User";
-import { encrypt } from "@utils/encrypt";
 import { AccountRequest } from "@models/objects/AccountRequest";
+
+import { encrypt } from "@utils/encrypt";
+import { signAuthTokens } from "@utils/jwt";
 
 const AccountLoginInput = builder.inputType("LoginInput", {
   fields: (t) => ({
@@ -62,15 +64,11 @@ builder.mutationFields((t) => ({
       /* Throw error if passwords don't match  */
       if (!isValid) throw new Error(`Incorrect password`);
 
-      /* Sign access token with JWT */
-      const accessToken = sign({ userId: user.id }, process.env.SECRET!, {
-        expiresIn: "1m",
-      });
-
-      /* Sign refresh token with JWT */
-      const refreshToken = sign({ userId: user.id }, process.env.SECRET!, {
-        expiresIn: "7d",
-      });
+      /* Sign authentication tokens */
+      const { accessToken, refreshToken } = await signAuthTokens(
+        { userId: user.id },
+        ctx.request,
+      );
 
       /* Set access token cookie */
       await ctx.request.cookieStore?.set("access-token", accessToken);
@@ -108,6 +106,7 @@ builder.mutationFields((t) => ({
       if (emailCheck)
         throw new Error(`Email ${input.email} is already in use!`);
 
+      /* Create new account request */
       return await prisma.accountRequest.create({
         data: {
           ...input,
@@ -164,7 +163,7 @@ builder.mutationFields((t) => ({
       /* Throw error if account request doesn't exist */
       if (!request) throw new Error(`Request doesn't exist`);
 
-      /* Delete denied account */
+      /* Delete denied request */
       await prisma.accountRequest.delete({ where: { email: input.email } });
     },
   }),

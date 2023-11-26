@@ -11,6 +11,7 @@ import { createYoga } from "graphql-yoga";
 import { schema } from "@models/index";
 import { useCookies } from "@whatwg-node/server-plugin-cookies";
 import { verify } from "jsonwebtoken";
+import { getUserFromRequest } from "@utils/context";
 
 /* Load environment variables */
 const port = process.env.PORT;
@@ -33,6 +34,11 @@ app.use(cors(options));
 /* Create GraphQL Yoga */
 const yoga = createYoga({
   schema,
+  context: async ({ request }) => {
+    const userId = await getUserFromRequest(request);
+
+    return { userId };
+  },
   plugins: [useCookies()],
 });
 
